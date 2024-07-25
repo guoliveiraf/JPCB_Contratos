@@ -29,7 +29,7 @@ def preencher_contrato(nome, rg, cpf, endereco, bairro, cidade, uf, dataevento, 
             paragrafo.text = paragrafo.text.replace(
                 '<<DATAEVENTO>>', dataevento)
 
-    output_path = f'contratos/Contrato_{nome}.docx'
+    output_path = f'/tmp/contratos/Contrato_{nome}.docx'
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
     doc.save(output_path)
     return output_path
@@ -41,7 +41,7 @@ def converter_para_pdf(input_path):
     output_path = input_path.replace('.docx', '.pdf')
 
     # Caminho do executável wkhtmltopdf
-    # No ambiente Streamlit Cloud ou outros ambientes, pode ser necessário ajustar isso
+    # Ajuste o caminho conforme necessário
     config = pdfkit.configuration(wkhtmltopdf='/usr/local/bin/wkhtmltopdf')
 
     try:
@@ -87,7 +87,7 @@ if st.button("Gerar Contrato"):
             docx_path = preencher_contrato(
                 nome, rg, cpf, endereco, bairro, cidade, uf, dataevento, tipo)
             pdf_path = converter_para_pdf(docx_path)
-            st.success(f"Contrato gerado com sucesso: {pdf_path}")
+            st.success(f"Contrato gerado com sucesso!")
 
             # Opções de download
             with open(docx_path, "rb") as file:
