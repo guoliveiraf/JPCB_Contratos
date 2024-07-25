@@ -1,6 +1,6 @@
 import streamlit as st
 from docx import Document
-from docx2pdf import convert
+import pdfkit
 import os
 
 # Função para preencher o contrato
@@ -34,12 +34,21 @@ def preencher_contrato(nome, rg, cpf, endereco, bairro, cidade, uf, dataevento, 
     doc.save(output_path)
     return output_path
 
-# Função para converter DOCX para PDF
+# Função para converter DOCX para PDF usando pdfkit
 
 
 def converter_para_pdf(input_path):
     output_path = input_path.replace('.docx', '.pdf')
-    convert(input_path, output_path)
+
+    # Caminho do executável wkhtmltopdf
+    # No ambiente Streamlit Cloud ou outros ambientes, pode ser necessário ajustar isso
+    config = pdfkit.configuration(wkhtmltopdf='/usr/local/bin/wkhtmltopdf')
+
+    try:
+        pdfkit.from_file(input_path, output_path, configuration=config)
+    except Exception as e:
+        raise RuntimeError(f"Erro ao converter para PDF: {e}")
+
     return output_path
 
 
@@ -74,23 +83,27 @@ if st.button("Gerar Contrato"):
     if not (nome and rg and cpf and endereco and bairro and cidade and uf and dataevento):
         st.error("Por favor, preencha todos os campos.")
     else:
-        docx_path = preencher_contrato(
-            nome, rg, cpf, endereco, bairro, cidade, uf, dataevento, tipo)
-        pdf_path = converter_para_pdf(docx_path)
-        st.success(f"Contrato gerado com sucesso: {pdf_path}")
+        try:
+            docx_path = preencher_contrato(
+                nome, rg, cpf, endereco, bairro, cidade, uf, dataevento, tipo)
+            pdf_path = converter_para_pdf(docx_path)
+            st.success(f"Contrato gerado com sucesso: {pdf_path}")
 
-        with open(docx_path, "rb") as file:
-            st.download_button(
-                label="Baixar Contrato (DOCX)",
-                data=file,
-                file_name=f"Contrato_{nome}.docx",
-                mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-            )
+            # Opções de download
+            with open(docx_path, "rb") as file:
+                st.download_button(
+                    label="Baixar Contrato (DOCX)",
+                    data=file,
+                    file_name=f"Contrato_{nome}.docx",
+                    mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                )
 
-        with open(pdf_path, "rb") as file:
-            st.download_button(
-                label="Baixar Contrato (PDF)",
-                data=file,
-                file_name=f"Contrato_{nome}.pdf",
-                mime="application/pdf"
-            )
+            with open(pdf_path, "rb") as file:
+                st.download_button(
+                    label="Baixar Contrato (PDF)",
+                    data=file,
+                    file_name=f"Contrato_{nome}.pdf",
+                    mime="application/pdf"
+                )
+        except Exception as e:
+            st.error(f"Ocorreu um erro: {e}")
