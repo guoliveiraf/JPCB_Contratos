@@ -41,8 +41,11 @@ def converter_para_pdf(input_path):
     return output_path
 
 
+logotipo = "artes/jpcb.png"
+
 # Interface Streamlit
 st.title("Gerador de Contratos")
+st.image(caminho_logotipo, width=150)
 
 # Seleção do tipo de contrato
 tipo = st.selectbox('Selecione o tipo de contrato:',
