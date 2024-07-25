@@ -98,12 +98,5 @@ if st.button("Gerar Contrato"):
                     mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
                 )
 
-            with open(pdf_path, "rb") as file:
-                st.download_button(
-                    label="Baixar Contrato (PDF)",
-                    data=file,
-                    file_name=f"Contrato_{nome}.pdf",
-                    mime="application/pdf"
-                )
         except Exception as e:
             st.error(f"Ocorreu um erro: {e}")
