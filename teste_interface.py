@@ -32,13 +32,6 @@ def preencher_contrato(nome, rg, cpf, endereco, bairro, cidade, uf, dataevento, 
     doc.save(output_path)
     return output_path
 
-# Função para converter DOCX para PDF
-
-
-def converter_para_pdf(input_path):
-    output_path = input_path.replace('.docx', '.pdf')
-    pypandoc.convert_file(input_path, 'pdf', outputfile=output_path)
-    return output_path
 
 
 logotipo = "artes/jpcb.png"
