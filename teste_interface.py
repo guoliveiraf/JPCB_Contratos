@@ -62,8 +62,7 @@ dataevento = st.text_input("Data do evento (ex: 01 de janeiro de 2024):")
 if st.button("Gerar Contrato"):
     docx_path = preencher_contrato(
         nome, rg, cpf, endereco, bairro, cidade, uf, dataevento, tipo)
-    pdf_path = converter_para_pdf(docx_path)
-    st.success(f"Contrato gerado com sucesso: {pdf_path}")
+    st.success(f"Contrato gerado com sucesso: {docx_path}")
 
     # Opções de download
     with open(docx_path, "rb") as file:
