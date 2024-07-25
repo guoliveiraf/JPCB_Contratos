@@ -1,4 +1,5 @@
 streamlit
+pdfkit
 pypandoc
 python-docx
 docx2pdf
